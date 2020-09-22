@@ -8,6 +8,7 @@ typedef struct iter
     uint8_t *end;
     bool circ;
     uint32_t count;
+    uint32_t loops;
 }iter_t;
 
 #define ARRAY_SIZE(a) ( sizeof(a) / sizeof(*a) )

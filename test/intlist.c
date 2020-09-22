@@ -6,8 +6,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "iter.h"
-#include "tokenizer.h"
+#include <iter.h>
+#include <tokenizer.h>
 
 int main(int c, char *v[])
 {
@@ -25,23 +25,17 @@ int main(int c, char *v[])
 
     printf("I got %d toks...\n", toks.count);
 
-    printf("Tok1: [%p] %s\n", toks.toks[0], toks.toks[0]);
-    printf("Tok1: [%p] %s\n", toks.toks[1], toks.toks[1]);
-    printf("Tok1: [%p] %s\n", toks.toks[2], toks.toks[2]);
-    printf("Tok1: [%p] %s\n", toks.toks[3], toks.toks[3]);
-    printf("Tok1: [%p] %s\n", toks.toks[4], toks.toks[4]);
-
     iter_t *iter = ITER_INIT( toks.toks, toks.count, true );
 
     char **tok;
     while( iter_next(iter) ) 
     {
+        if (iter->loops >= 5)
+            break;
+        
         tok = iter->data;
-        printf("[%p]\n", *tok );
         printf("[%s]\n", *tok);
 
-        if (iter->count > 100)
-            break;
     }
 
     return 0;

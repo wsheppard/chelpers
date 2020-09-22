@@ -14,7 +14,6 @@ int count_toks( char *s )
     for ( ; *s; s++)
         if (*s==',') ret++;
 
-    printf("Count... %d\n", ret);
     return ret + 1;
 }
 

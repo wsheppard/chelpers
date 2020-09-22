@@ -1,27 +1,26 @@
+-include vars.mk
 
-INCLUDES=
-LIBPATHS=
-LIBS=rt
-CFLAGS= -pthread -g -ggdb 
-
-TARGET=intlist 
-SOURCES=$(strip $(TARGET)).c
-SOURCES+=iter.c tokenizer.c
-
-_INCLUDES=$(foreach inc, $(INCLUDES), -I$(inc))
-_LIBPATHS=$(foreach lib, $(LIBPATHS), -L$(lib))
+_INCLUDES=$(foreach inc, $(INCLUDES), -I$(shell readlink -f $(inc)))
+_LIBPATHS=$(foreach lib, $(LIBPATHS), -L$(shell readlink -f $(lib)))
 _LIBS=$(foreach lib, $(LIBS), -l$(lib))
 
 OBJDIR := .objs
 DEPDIR := .deps
 OBJECTS = $(SOURCES:%.c=$(OBJDIR)/%.o)
 DEPFILES := $(SOURCES:%.c=$(DEPDIR)/%.d)
-CFLAGS += $(_INCLUDES)
+CFLAGS += $(_INCLUDES) -fPIC 
 LDFLAGS += $(_LIBPATHS)
 LDLIBS += $(_LIBS)
 DEPFLAGS = -MT '$(OBJDIR)/$*.o' -MMD -MF $(DEPDIR)/$*.d
+DEFAULT ?= binary
 
-$(TARGET): $(OBJECTS) 
+all: $(DEFAULT)
+
+binary: $(OBJDIR)/$(TARGET)
+static: $(OBJDIR)/$(TARGET).a
+shared: $(OBJDIR)/lib$(TARGET).so
+
+$(OBJDIR)/$(TARGET): $(OBJECTS) 
 	@echo Linking...
 	$(CC) -o $@ $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS)
 
@@ -42,8 +41,12 @@ env:
 	@echo [$(DEPFILES)]
 
 clean:
-	@rm -irf $(OBJDIR)
+	@rm -irf $(OBJDIR) $(DEPDIR)
 
+$(OBJDIR)/$(TARGET).a: $(OBJECTS)
+	@ar rcs $@ $(OBJECTS)
 
+$(OBJDIR)/lib$(TARGET).so: $(OBJECTS)
+	$(CC) -shared -o $@ $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS)
 
 

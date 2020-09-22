@@ -20,15 +20,17 @@ iter_t * iter_next( iter_t *iter )
     
     if ((uint8_t*)iter->data >= iter->end)
     {
-        if(iter->circ)
+        if(iter->circ){
             iter->data = iter->start;
+            iter->loops++;
+        }
         else
             iter->data = NULL;
     } 
 
     iter->count++;
 
-    return iter;
+    return iter->data ? iter : NULL;
 }
 
 
