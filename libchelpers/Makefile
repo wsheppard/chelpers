@@ -2,11 +2,11 @@ INCLUDES=
 LIBPATHS=
 LIBS=
 CFLAGS= -O2 -pthread -g -ggdb 
-CC = gcc
+CC = arm-linux-gcc
 
 TARGET=chelpers
 SOURCES=
-SOURCES+=iter.c tokenizer.c
+SOURCES+=iter.c tokenizer.c chelpers.c
 
 DEFAULT=shared
 
