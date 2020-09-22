@@ -21,7 +21,6 @@ int sep( char* s, char** toks )
 {
     char *v = s;
     char *tok;
-    uint32_t counter;
 
     while( tok = strsep( &v, "," ) )
     {
