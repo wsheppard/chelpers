@@ -21,18 +21,17 @@ static: $(OBJDIR)/$(TARGET).a
 shared: $(OBJDIR)/lib$(TARGET).so
 
 $(OBJDIR)/$(TARGET): $(OBJECTS) 
-	@echo Linking...
+	@echo Linking [$@]
 	$(CC) -o $@ $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS)
 
 -include $(wildcard $(DEPDIR)/*.d)
 
 $(OBJDIR) $(DEPDIR):
-	@echo Making dir..
-	mkdir -p $@
+	@echo Making dir [$@]
+	@mkdir -p $@
 
 $(OBJECTS): $(OBJDIR)/%.o: %.c | $(OBJDIR) $(DEPDIR)
-	@echo Hello
-	@echo Building object [$@] from [$^]	
+	@echo Building object [$@] because [$?]	
 	$(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@ $<
 
 env:
@@ -44,9 +43,11 @@ clean:
 	@rm -irf $(OBJDIR) $(DEPDIR)
 
 $(OBJDIR)/$(TARGET).a: $(OBJECTS)
+	@echo Create static library [$@]
 	@ar rcs $@ $(OBJECTS)
 
 $(OBJDIR)/lib$(TARGET).so: $(OBJECTS)
+	@echo Create shared library [$@]
 	$(CC) -shared -o $@ $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS)
 
 
