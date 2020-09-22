@@ -19,6 +19,7 @@ DEPFILES := $(SOURCES:%.c=$(DEPDIR)/%.d)
 CFLAGS += $(_INCLUDES)
 LDFLAGS += $(_LIBPATHS)
 LDLIBS += $(_LIBS)
+DEPFLAGS = -MT '$(OBJDIR)/$*.o' -MMD -MF $(DEPDIR)/$*.d
 
 $(TARGET): $(OBJECTS) 
 	@echo Linking...
@@ -30,14 +31,10 @@ $(OBJDIR) $(DEPDIR):
 	@echo Making dir..
 	mkdir -p $@
 
-$(DEPFILES): $(DEPDIR)/%.d : %.c | $(DEPDIR)
-	@echo dep $@ $*
-	$(CC) -MT '$(OBJDIR)/$*.o' -MM -MF $@ $*.c
-
-$(OBJECTS): $(OBJDIR)/%.o: %.c $(DEPDIR)/%.d | $(OBJDIR)
+$(OBJECTS): $(OBJDIR)/%.o: %.c | $(OBJDIR) $(DEPDIR)
 	@echo Hello
 	@echo Building object [$@] from [$^]	
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@ $<
 
 env:
 	@echo [$(SOURCES)]

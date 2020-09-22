@@ -23,4 +23,5 @@ typedef struct iter
     .end=((uint8_t*)a)+sizeof(a), \
     .circ=c }
 
+
 void* iter_next( iter_t *iter );
