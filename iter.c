@@ -11,24 +11,24 @@
 #include "iter.h"
 
 
-void* iter_next( iter_t *iter )
+iter_t * iter_next( iter_t *iter )
 {
-    if ( !iter->last )
-        iter->last = iter->start;
+    if ( !iter->data )
+        iter->data = iter->start;
     else
-        iter->last += iter->elsize;
+        iter->data += iter->elsize;
     
-    if (iter->last >= iter->end)
+    if ((uint8_t*)iter->data >= iter->end)
     {
         if(iter->circ)
-            iter->last = iter->start;
+            iter->data = iter->start;
         else
-            iter->last = NULL;
+            iter->data = NULL;
     } 
 
-    printf("%p\n", iter->last);
+    iter->count++;
 
-    return iter->last;
+    return iter;
 }
 
 

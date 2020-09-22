@@ -31,14 +31,17 @@ int main(int c, char *v[])
     printf("Tok1: [%p] %s\n", toks.toks[3], toks.toks[3]);
     printf("Tok1: [%p] %s\n", toks.toks[4], toks.toks[4]);
 
-    iter_t *iter;
-    iter = ITER_INIT( toks.toks, toks.count, true );
+    iter_t *iter = ITER_INIT( toks.toks, toks.count, true );
 
     char **tok;
-    while( tok = iter_next(iter) ) 
+    while( iter_next(iter) ) 
     {
-        printf("[%p]\n",  *tok);
+        tok = iter->data;
+        printf("[%p]\n", *tok );
         printf("[%s]\n", *tok);
+
+        if (iter->count > 100)
+            break;
     }
 
     return 0;

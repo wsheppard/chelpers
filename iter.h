@@ -4,9 +4,10 @@ typedef struct iter
 {
     uint8_t *start;
     uint32_t elsize;
-    uint8_t *last;
+    void *data;
     uint8_t *end;
     bool circ;
+    uint32_t count;
 }iter_t;
 
 #define ARRAY_SIZE(a) ( sizeof(a) / sizeof(*a) )
@@ -24,4 +25,4 @@ typedef struct iter
     .circ=c }
 
 
-void* iter_next( iter_t *iter );
+iter_t* iter_next( iter_t *iter );
