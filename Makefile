@@ -2,7 +2,7 @@
 INCLUDES=
 LIBPATHS=
 LIBS=rt
-CFLAGS= -pthread -g -ggdb
+CFLAGS= -pthread -g -ggdb 
 
 TARGET=intlist 
 SOURCES=$(strip $(TARGET)).c
@@ -14,7 +14,6 @@ _LIBS=$(foreach lib, $(LIBS), -l$(lib))
 
 OBJDIR := .objs
 DEPDIR := .deps
-DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 OBJECTS = $(SOURCES:%.c=$(OBJDIR)/%.o)
 DEPFILES := $(SOURCES:%.c=$(DEPDIR)/%.d)
 CFLAGS += $(_INCLUDES)
@@ -22,21 +21,23 @@ LDFLAGS += $(_LIBPATHS)
 LDLIBS += $(_LIBS)
 
 $(TARGET): $(OBJECTS) 
+	@echo Linking...
+	$(CC) -o $@ $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS)
+
+-include $(wildcard $(DEPDIR)/*.d)
 
 $(OBJDIR) $(DEPDIR):
 	@echo Making dir..
 	mkdir -p $@
 
-$(DEPDIR)/%.d:  | $(DEPDIR)
-	@echo A deps?
+$(DEPFILES): $(DEPDIR)/%.d : %.c | $(DEPDIR)
+	@echo dep $@ $*
+	$(CC) -MT '$(OBJDIR)/$*.o' -MM -MF $@ $*.c
 
-$(OBJDIR)/%.o : %.c $(DEPDIR)/%.d  | $(OBJDIR) 
-	@echo Building object...   	
+$(OBJECTS): $(OBJDIR)/%.o: %.c $(DEPDIR)/%.d | $(OBJDIR)
+	@echo Hello
+	@echo Building object [$@] from [$^]	
 	$(CC) $(CFLAGS) -c -o $@ $<
-
-
-
-
 
 env:
 	@echo [$(SOURCES)]
@@ -45,5 +46,7 @@ env:
 
 clean:
 	@rm -irf $(OBJDIR)
+
+
 
 

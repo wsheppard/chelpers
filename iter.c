@@ -6,7 +6,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <time.h>
+
 #include "iter.h"
+
 
 void* iter_next( iter_t *iter )
 {
