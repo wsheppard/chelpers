@@ -35,7 +35,7 @@ $(OBJDIR) $(DEPDIR):
 
 $(OBJECTS): $(OBJDIR)/%.o: %.c Makefile | $(ALLDIRS)
 	@echo Building object [$@] because [$?]	
-	@echo Depfile is - [$(subst /,-,$*.d)]
+	@echo Depfile is - [$*.d]
 	$(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@ $<
 
 env:
