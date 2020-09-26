@@ -20,9 +20,6 @@ binary: $(OBJDIR)/$(TARGET)
 static: $(OBJDIR)/$(TARGET).a
 shared: $(OBJDIR)/lib$(TARGET).so
 
-$(OBJDIR)/$(TARGET): $(OBJECTS) 
-	@echo Linking [$@]
-	$(CC) -o $@ $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS)
 
 -include $(wildcard $(DEPDIR)/*.d)
 
@@ -30,7 +27,7 @@ $(OBJDIR) $(DEPDIR):
 	@echo Making dir [$@]
 	@mkdir -p $@
 
-$(OBJECTS): $(OBJDIR)/%.o: %.c | $(OBJDIR) $(DEPDIR)
+$(OBJECTS): $(OBJDIR)/%.o: %.c Makefile | $(OBJDIR) $(DEPDIR)
 	@echo Building object [$@] because [$?]	
 	$(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@ $<
 
@@ -42,10 +39,17 @@ env:
 clean:
 	@rm -irf $(OBJDIR) $(DEPDIR)
 
+#Binary
+$(OBJDIR)/$(TARGET): $(OBJECTS) 
+	@echo Linking [$@]
+	$(CC) -o $@ $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS)
+
+#Static
 $(OBJDIR)/$(TARGET).a: $(OBJECTS)
 	@echo Create static library [$@]
 	@ar rcs $@ $(OBJECTS)
 
+#Shared
 $(OBJDIR)/lib$(TARGET).so: $(OBJECTS)
 	@echo Create shared library [$@]
 	$(CC) -shared -o $@ $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS)
