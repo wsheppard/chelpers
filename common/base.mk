@@ -13,28 +13,36 @@ LDFLAGS += $(_LIBPATHS)
 LDLIBS += $(_LIBS)
 DEPFLAGS = -MT '$(OBJDIR)/$*.o' -MMD -MF $(DEPDIR)/$*.d
 DEFAULT ?= binary
+SUBDIRS = $(sort $(dir $(SOURCES) ))
+ALLDIRS = $(foreach dir, $(SUBDIRS), $(OBJDIR)/$(dir))
+ALLDIRS += $(foreach dir, $(SUBDIRS), $(DEPDIR)/$(dir))
 
 all: $(DEFAULT)
+
+$(ALLDIRS):
+	@echo Making dir [$@]
+	@mkdir -p $@
 
 binary: $(OBJDIR)/$(TARGET)
 static: $(OBJDIR)/$(TARGET).a
 shared: $(OBJDIR)/lib$(TARGET).so
 
-
--include $(wildcard $(DEPDIR)/*.d)
+-include $(DEPFILES)
 
 $(OBJDIR) $(DEPDIR):
 	@echo Making dir [$@]
 	@mkdir -p $@
 
-$(OBJECTS): $(OBJDIR)/%.o: %.c Makefile | $(OBJDIR) $(DEPDIR)
+$(OBJECTS): $(OBJDIR)/%.o: %.c Makefile | $(ALLDIRS)
 	@echo Building object [$@] because [$?]	
+	@echo Depfile is - [$(subst /,-,$*.d)]
 	$(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@ $<
 
 env:
 	@echo [$(SOURCES)]
 	@echo [$(OBJECTS)]
 	@echo [$(DEPFILES)]
+	@echo [$(ALLDIRS)]
 
 clean:
 	@rm -irf $(OBJDIR) $(DEPDIR)
