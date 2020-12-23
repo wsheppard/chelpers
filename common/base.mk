@@ -40,7 +40,7 @@ $(OBJDIR) $(DEPDIR):
 	@echo Making dir [$@]
 	@mkdir -p $@
 
-$(OBJECTS): $(OBJDIR)/%.o: %.c Makefile | $(ALLDIRS)
+$(OBJECTS): $(OBJDIR)/%.o: %.c $(MAKEFILE_LIST) | $(ALLDIRS)
 	@echo Building object [$@] because [$?]	
 	@echo Depfile is - [$*.d]
 	$(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@ $<
