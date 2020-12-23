@@ -1,3 +1,10 @@
+# 
+# SPDX-License-Identifier: MIT
+#
+# Written by Will Sheppard ( will@jjrsoftware.co.uk )
+#
+# Basic makefile include - flexible for many purposes
+
 -include vars.mk
 
 _INCLUDES=$(foreach inc, $(INCLUDES), -I$(shell readlink -f $(inc)))
