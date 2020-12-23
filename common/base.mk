@@ -1,7 +1,7 @@
 # 
 # SPDX-License-Identifier: MIT
 #
-# Written by Will Sheppard ( will@jjrsoftware.co.uk )
+# Written by Will Sheppard ( will@jjrsoftware.co.uk ), 2019
 #
 # Basic makefile include - flexible for many purposes
 
