@@ -3,6 +3,8 @@
 #
 # Written by Will Sheppard ( will@jjrsoftware.co.uk ), 2019
 #
+# As part of https://github.com/wsheppard/chelpers
+#
 # Basic makefile include - flexible for many purposes
 
 -include vars.mk
@@ -10,17 +12,19 @@
 _INCLUDES=$(foreach inc, $(INCLUDES), -I$(shell readlink -f $(inc)))
 _LIBPATHS=$(foreach lib, $(LIBPATHS), -L$(shell readlink -f $(lib)))
 _LIBS=$(foreach lib, $(LIBS), -l$(lib))
+_SOURCES=$(foreach src, $(SOURCES), $(shell readlink -f $(src)))
+
 
 OBJDIR := .objs
 DEPDIR := .deps
-OBJECTS = $(SOURCES:%.c=$(OBJDIR)/%.o)
-DEPFILES := $(SOURCES:%.c=$(DEPDIR)/%.d)
+OBJECTS = $(_SOURCES:%.c=$(OBJDIR)/%.o)
+DEPFILES := $(_SOURCES:%.c=$(DEPDIR)/%.d)
 CFLAGS += $(_INCLUDES) -fPIC 
 LDFLAGS += $(_LIBPATHS)
 LDLIBS += $(_LIBS)
 DEPFLAGS = -MT '$(OBJDIR)/$*.o' -MMD -MF $(DEPDIR)/$*.d
 DEFAULT ?= binary
-SUBDIRS = $(sort $(dir $(SOURCES) ))
+SUBDIRS = $(sort $(dir $(_SOURCES) ))
 ALLDIRS = $(foreach dir, $(SUBDIRS), $(OBJDIR)/$(dir))
 ALLDIRS += $(foreach dir, $(SUBDIRS), $(DEPDIR)/$(dir))
 
@@ -46,9 +50,15 @@ $(OBJECTS): $(OBJDIR)/%.o: %.c $(MAKEFILE_LIST) | $(ALLDIRS)
 	$(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@ $<
 
 env:
+	@echo ==== INCLUDES ====
+	@echo [$(INCLUDES)]
+	@echo ==== SOURCES ====
 	@echo [$(SOURCES)]
+	@echo ==== OBJECTS ====
 	@echo [$(OBJECTS)]
+	@echo ==== DEPFILES ====
 	@echo [$(DEPFILES)]
+	@echo ==== ALLDIRS ====
 	@echo [$(ALLDIRS)]
 
 clean:
