@@ -9,10 +9,13 @@
 
 -include vars.mk
 
-_INCLUDES=$(foreach inc, $(INCLUDES), -I$(shell readlink -f $(inc)))
-_LIBPATHS=$(foreach lib, $(LIBPATHS), -L$(shell readlink -f $(lib)))
+SOURCES ?= $(wildcard *.c)
+TARGET ?= $(word 1, $(SOURCES:%.c=%) )
+
+_INCLUDES=$(foreach inc, $(INCLUDES), -I$(realpath -f $(inc)))
+_LIBPATHS=$(foreach lib, $(LIBPATHS), -L$(realpath -f $(lib)))
 _LIBS=$(foreach lib, $(LIBS), -l$(lib))
-_SOURCES=$(foreach src, $(SOURCES), $(shell readlink -f $(src)))
+_SOURCES=$(foreach src, $(SOURCES), $(realpath -f $(src)))
 
 
 OBJDIR := .objs
