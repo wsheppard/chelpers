@@ -53,6 +53,7 @@ $(OBJECTS): $(OBJDIR)/%.o: %.c $(MAKEFILE_LIST) | $(ALLDIRS)
 	$(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@ $<
 
 env:
+	@echo TARGET: [$(TARGET)]
 	@echo ==== INCLUDES ====
 	@echo [$(INCLUDES)]
 	@echo ==== SOURCES ====
