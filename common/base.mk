@@ -22,7 +22,7 @@ OBJDIR := .objs
 DEPDIR := .deps
 OBJECTS = $(_SOURCES:%.c=$(OBJDIR)/%.o)
 DEPFILES := $(_SOURCES:%.c=$(DEPDIR)/%.d)
-CFLAGS += $(_INCLUDES) -fPIC 
+CFLAGS += $(_INCLUDES) #-fPIC 
 LDFLAGS += $(_LIBPATHS)
 LDLIBS += $(_LIBS)
 DEPFLAGS = -MT '$(OBJDIR)/$*.o' -MMD -MF $(DEPDIR)/$*.d
@@ -38,6 +38,7 @@ $(ALLDIRS):
 	@mkdir -p $@
 
 binary: $(OBJDIR)/$(TARGET)
+	ln -snf $< $(TARGET)
 static: $(OBJDIR)/$(TARGET).a
 shared: $(OBJDIR)/lib$(TARGET).so
 
