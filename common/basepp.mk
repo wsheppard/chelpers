@@ -12,11 +12,11 @@
 SOURCES ?=$(wildcard *.c)
 SOURCESXX ?=$(wildcard *.cpp)
 
-_INCLUDES=$(foreach inc, $(INCLUDES), -I$(realpath -f $(inc)))
-_LIBPATHS=$(foreach lib, $(LIBPATHS), -L$(realpath -f $(lib)))
+_INCLUDES=$(foreach inc, $(INCLUDES), -I$(realpath $(inc)))
+_LIBPATHS=$(foreach lib, $(LIBPATHS), -L$(realpath $(lib)))
 _LIBS=$(foreach lib, $(LIBS), -l$(lib))
-_SOURCES=$(foreach src, $(SOURCES), $(realpath -f $(src)))
-_SOURCESXX=$(foreach src, $(SOURCESXX), $(realpath -f $(src)))
+_SOURCES=$(foreach src, $(SOURCES), $(realpath $(src)))
+_SOURCESXX=$(foreach src, $(SOURCESXX), $(realpath $(src)))
 
 SOURCESALL =$(_SOURCES) $(_SOURCESXX)
 SOURCESBASE= $(basename $(SOURCESALL))
