@@ -6,6 +6,13 @@
 #define PACKED __attribute__ ((packed))
 #define CLEANUP __attribute__ ((__cleanup__(cleanup)))
 
+#define FOR_EACH_SEP(res,str,sep) \
+    for ( char**__cur = &(char*){str}, *res; ((res=strsep(__cur,sep)));  )
+
+#define FOR_EACH_SEP_LITERAL(res,str,sep) \
+    FOR_EACH_SEP(res,(char[]){str},sep)
+
+
 #define MEM_STR(p,n) ({\
 	static char __thread __msstorage[128];\
 	char *scur = __msstorage;\

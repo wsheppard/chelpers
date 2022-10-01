@@ -2,12 +2,12 @@ INCLUDES=
 LIBPATHS=
 LIBS=
 CFLAGS= -O2 -pthread -g -ggdb 
-CC = arm-linux-gcc
+#CC = arm-linux-gcc
 
 TARGET=chelpers
 SOURCES=
 SOURCES+=iter.c tokenizer.c chelpers.c
 
-DEFAULT=shared
+DEFAULT=static
 
-include ../common/base.mk
+include ../common/basepp.mk
