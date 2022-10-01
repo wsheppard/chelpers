@@ -79,6 +79,8 @@ env:
 	@echo [$(DEPFILESALL)]
 	@echo ==== ALLDIRS ====
 	@echo [$(ALLDIRS)]
+	@echo ==== LIBS ====
+	@echo [$(LIBS)]
 
 clean:
 	@rm -irf $(OBJDIR) $(DEPDIR)
