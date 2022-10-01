@@ -67,20 +67,33 @@ $(OBJECTSXX): $(OBJDIR)/%.o: %.cpp $(MAKEFILE_LIST) | $(ALLDIRS)
 	@echo Depfile is - [$*.d]
 	$(CXX) $(DEPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
-env:
-	@echo TARGET: [$(TARGET)]
+#.SILENT:help
+define listit
+	$(foreach src,$(1),printf " * $(src)\n";)
+endef
+
+help env:
+	@echo ==== TARGET ====
+	@echo "  $(TARGET)"
+	@echo
 	@echo ==== INCLUDES ====
-	@echo [$(INCLUDES)]
+	@$(call listit, $(INCLUDES))
+	@echo
 	@echo ==== SOURCES ====
-	@echo [$(SOURCESALL)]
+	@$(call listit, $(SOURCESALL))
+	@echo
 	@echo ==== OBJECTS ====
-	@echo [$(OBJECTSALL)]
+	@$(call listit, $(OBJECTSALL))
+	@echo
 	@echo ==== DEPFILES ====
-	@echo [$(DEPFILESALL)]
+	@$(call listit, $(DEPFILESALL))
+	@echo
 	@echo ==== ALLDIRS ====
-	@echo [$(ALLDIRS)]
+	@$(call listit, $(ALLDIRS))
+	@echo
 	@echo ==== LIBS ====
-	@echo [$(LIBS)]
+	@$(call listit, $(LIBS))
+	@echo
 
 clean:
 	@rm -irf $(OBJDIR) $(DEPDIR)
