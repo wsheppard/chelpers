@@ -9,8 +9,8 @@
 
 -include vars.mk
 
-SOURCES ?=$(wildcard *.c)
-SOURCESXX ?=$(wildcard *.cpp)
+SOURCES ?=$(wildcard *.c) $(EXSRC)
+SOURCESXX ?=$(wildcard *.cpp) $(EXSRCXX)
 
 _INCLUDES=$(foreach inc, $(INCLUDES), -I$(realpath $(inc)))
 _LIBPATHS=$(foreach lib, $(LIBPATHS), -L$(realpath $(lib)))
@@ -26,7 +26,7 @@ OBJDIR := .objs
 DEPDIR := .deps
 OBJECTS = $(_SOURCES:%.c=$(OBJDIR)/%.o)
 OBJECTSXX = $(_SOURCESXX:%.cpp=$(OBJDIR)/%.o)
-OBJECTSALL = $(OBJECTS) $(OBJECTSXX)
+OBJECTSALL = $(OBJECTS) $(OBJECTSXX) $(EXOBJS)
 
 DEPFILES := $(_SOURCES:%.c=$(DEPDIR)/%.d)
 DEPFILESXX := $(_SOURCESXX:%.cpp=$(DEPDIR)/%.d)
@@ -93,6 +93,12 @@ help env:
 	@echo
 	@echo ==== LIBS ====
 	@$(call listit, $(LIBS))
+	@echo
+	@echo ==== LDFLAGS ====
+	@$(call listit, $(LDFLAGS))
+	@echo
+	@echo ==== CFLAGS ====
+	@$(call listit, $(CFLAGS))
 	@echo
 
 clean:
