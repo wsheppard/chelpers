@@ -73,6 +73,10 @@ define listit
 endef
 
 help env:
+	@echo ==== COMPILER ====
+	@echo "C:  $(CC) [$(shell which $(CC))]"
+	@echo "Cxx:  $(CXX)"
+	@echo
 	@echo ==== TARGET ====
 	@echo "  $(TARGET)"
 	@echo
